@@ -1,0 +1,11 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+<file alias="thermometer.png">icons/thermometer.png</file>
+<file alias="thermometer_small.png">icons/thermometer_small.png</file>
+<file alias="umbrella.png">icons/umbrella.png</file>
+<file alias="umbrella_small.png">icons/umbrella_small.png</file>
+<file alias="sunrise.png">icons/sunrise.png</file>
+<file alias="wind.png">icons/wind.png</file>
+<file alias="na.png">icons/na.png</file>
+</qresource>
+</RCC>

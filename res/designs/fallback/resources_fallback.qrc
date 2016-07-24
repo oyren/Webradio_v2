@@ -1,0 +1,46 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+<file alias="home.png">fallback/home.png</file>
+<file alias="search.png">fallback/search.png</file>
+<file alias="back.png">fallback/back.png</file>
+<file alias="fav.png">fallback/fav.png</file>
+<file alias="fav_empty.png">fallback/fav_empty.png</file>
+<file alias="favorites.png">fallback/favorites.png</file>
+<file alias="radio.png">fallback/radio.png</file>
+<file alias="media.png">fallback/media.png</file>
+<file alias="volume_up.png">fallback/volume_up.png</file>
+<file alias="volume_down.png">fallback/volume_down.png</file>
+<file alias="backward.png">fallback/backward.png</file>
+<file alias="next.png">fallback/next.png</file>
+<file alias="play.png">fallback/play.png</file>
+<file alias="pause.png">fallback/pause.png</file>
+<file alias="stop.png">fallback/stop.png</file>
+<file alias="refresh.png">fallback/refresh.png</file>
+<file alias="search_folder.png">fallback/search_folder.png</file>
+<file alias="show_playlist.png">fallback/show_playlist.png</file>
+<file alias="add.png">fallback/add.png</file>
+<file alias="up.png">fallback/up.png</file>
+<file alias="down.png">fallback/down.png</file>
+<file alias="del.png">fallback/del.png</file>
+<file alias="albumart_fallback.png">fallback/albumart_fallback.png</file>
+<file alias="sunrise.png">fallback/sunrise.png</file>
+<file alias="thermometer.png">fallback/thermometer.png</file>
+<file alias="umbrella.png">fallback/umbrella.png</file>
+<file alias="wind.png">fallback/wind.png</file>
+<file alias="weather.png">fallback/weather.png</file>
+<file alias="loading.gif">fallback/loading.gif</file>
+<file alias="loading_wall.png">fallback/loading_wall.png</file>
+<file alias="folder.png">fallback/folder.png</file>
+<file alias="mp3.png">fallback/mp3.png</file>
+<file alias="expand.png">fallback/expand.png</file>
+<file alias="collapse.png">fallback/collapse.png</file>
+<file alias="repeat.png">fallback/repeat.png</file>
+<file alias="repeat_active.png">fallback/repeat_active.png</file>
+<file alias="selectall.png">fallback/selectall.png</file>
+<file alias="connected.png">fallback/connected.png</file>
+<file alias="disconnected.png">fallback/disconnected.png</file>
+<file alias="clock.png">fallback/clock.png</file>
+<file alias="config.png">fallback/config.png</file>
+<file alias="carbon.jpg">fallback/carbon.jpg</file>
+</qresource>
+</RCC>

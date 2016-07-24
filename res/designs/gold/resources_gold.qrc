@@ -1,0 +1,46 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+<file alias="home.png">gold/home.png</file>
+<file alias="search.png">gold/search.png</file>
+<file alias="back.png">gold/back.png</file>
+<file alias="fav.png">gold/fav.png</file>
+<file alias="fav_empty.png">gold/fav_empty.png</file>
+<file alias="favorites.png">gold/favorites.png</file>
+<file alias="radio.png">gold/radio.png</file>
+<file alias="media.png">gold/media.png</file>
+<file alias="volume_up.png">gold/volume_up.png</file>
+<file alias="volume_down.png">gold/volume_down.png</file>
+<file alias="backward.png">gold/backward.png</file>
+<file alias="next.png">gold/next.png</file>
+<file alias="play.png">gold/play.png</file>
+<file alias="pause.png">gold/pause.png</file>
+<file alias="stop.png">gold/stop.png</file>
+<file alias="refresh.png">gold/refresh.png</file>
+<file alias="search_folder.png">gold/search_folder.png</file>
+<file alias="show_playlist.png">gold/show_playlist.png</file>
+<file alias="add.png">gold/add.png</file>
+<file alias="up.png">gold/up.png</file>
+<file alias="down.png">gold/down.png</file>
+<file alias="del.png">gold/del.png</file>
+<file alias="albumart_fallback.png">gold/albumart_fallback.png</file>
+<file alias="sunrise.png">gold/sunrise.png</file>
+<file alias="thermometer.png">gold/thermometer.png</file>
+<file alias="umbrella.png">gold/umbrella.png</file>
+<file alias="wind.png">gold/wind.png</file>
+<file alias="weather.png">gold/weather.png</file>
+<file alias="loading.gif">gold/loading.gif</file>
+<file alias="loading_wall.png">gold/loading_wall.png</file>
+<file alias="folder.png">gold/folder.png</file>
+<file alias="mp3.png">gold/mp3.png</file>
+<file alias="expand.png">gold/expand.png</file>
+<file alias="collapse.png">gold/collapse.png</file>
+<file alias="repeat.png">gold/repeat.png</file>
+<file alias="repeat_active.png">gold/repeat_active.png</file>
+<file alias="selectall.png">gold/selectall.png</file>
+<file alias="connected.png">gold/connected.png</file>
+<file alias="disconnected.png">gold/disconnected.png</file>
+<file alias="clock.png">gold/clock.png</file>
+<file alias="config.png">gold/config.png</file>
+<file alias="lochblech.jpg">gold/lochblech.jpg</file>
+</qresource>
+</RCC>

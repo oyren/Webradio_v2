@@ -1,0 +1,148 @@
+QMainWindow {
+        background-image: url(':/lochblech.jpg');
+        background-repeat: repeat-xy;
+        background-position: top-left;
+        color: rgb(240, 240, 240);
+        }
+QLabel{
+       color: rgb(240, 240, 240);
+       }
+QMessageBox {
+        background-color: rgb(76, 76, 76);
+        color: rgb(240, 240, 240);
+        }
+QPushButton{
+        background-color: rgb(42, 42, 42);
+        color: rgb(255, 255, 255);
+        border-style: solid;
+        border-color: black;
+        border-width: 5px;
+        border-radius: 10px;
+        }
+QPushButton::pressed{
+        background: rgb(255, 106, 0);
+        }
+QListWidget{
+        background-color: rgb(76, 76, 76);
+        color: rgb(240, 240, 240);
+        }
+QListWidget::item:selected{
+        background-color: rgb(255, 106, 0);
+        }
+QListWidgetItem{
+        background-color: rgb(76, 76, 76);
+        color: rgb(240, 240, 240);
+        }
+QStatusbar{
+        background: rgb(76, 76, 76);
+        }
+QTabWidget::pane{
+        border: 0;
+        }
+QTabBar::tab{
+        border: 2;
+        border-color: black;
+        }
+QTreeView{
+        background: rgb(76, 76, 76);
+        border: 2;
+        border-color: black;
+        }
+QTreeView::item:selected{
+        background-color: rgb(255, 106, 0);
+        }
+QHeaderView::section{
+        background-color: rgb(76, 76, 76);
+        }
+QScrollBar:vertical {
+        border: none;
+        background: rgb(180, 180, 180);
+        width: 35px;
+        margin: 35px 0 35px 0;
+        }
+QScrollBar::handle:vertical {
+        background: rgb(42, 42, 42);
+        min-height: 35px;
+        }
+QScrollBar::add-line:vertical {
+        background: none;
+        height: 35px;
+        subcontrol-position: bottom;
+        subcontrol-origin: margin;
+        }
+QScrollBar::sub-line:vertical {
+        background: none;
+        height: 35px;
+        subcontrol-position: top left;
+        subcontrol-origin: margin;
+        position: absolute;
+        }
+QScrollBar:up-arrow:vertical {
+        width: 35px;
+        height: 35px;
+        background: rgb(42, 42, 42);
+        image: url(':/up.png');
+        }
+QScrollBar::down-arrow:vertical {
+        width: 35px;
+        height: 35px;
+        background: rgb(42, 42, 42);
+        image: url(':/down.png');
+        }
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+        background: none;
+        }
+QSlider::groove:horizontal {
+        border: 1px solid #bbb;
+        background: red;
+        height: 10px;
+        border-radius: 4px;
+        }
+QSlider::sub-page:horizontal {
+        background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1, stop: 0 #4c4c4c, stop: 1 #ff6a00);
+        border: 1px solid #777;
+        height: 10px;
+        border-radius: 4px;
+        }
+QSlider::add-page:horizontal {
+        background: #fff;
+        border: 1px solid #777;
+        height: 10px;
+        border-radius: 4px;
+        }
+QSlider::handle:horizontal {
+        background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #ff6a00, stop:1 #4c4c4c);
+        border: 1px solid #777;
+        width: 13px;
+        margin-top: -2px;
+        margin-bottom: -2px;
+        border-radius: 4px;
+        }
+QSlider::handle:horizontal:hover {
+        background: orange;
+        border: 1px solid #444;
+        border-radius: 4px;
+        }
+QSlider::sub-page:horizontal:disabled {
+        background: orange;
+        border-color: #999;
+        }
+QSlider::add-page:horizontal:disabled {
+        background: black;
+        border-color: #999;
+        }
+QSlider::handle:horizontal:disabled {
+        background: gray;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        }
+QTreeView::branch {
+        height: 62;
+        width: 65;
+        }
+QTreeView::branch:closed:has-children {
+        image: url(:/expand.png);
+        }
+QTreeView::branch:open:has-children {
+        image: url(:/collapse.png);
+        }

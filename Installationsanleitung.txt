@@ -1,0 +1,437 @@
+Installation von Raspbian Jessy, Webradio.py und dessen Inbetriebnahme:
+=======================================================================
+
+Hinweis: Mein Radio, welcher auch im Youtube-Video zu sehen ist, läuft auf
+Raspbian Wheezy mit der MPD Version 0.16.1 (mpd --version). Diese Installationsanleitung
+wurde jedoch aufgrund einiger Probleme die User hatten welche den Radio gerne nachbauen
+wollten erstellt.
+
+MPD 0.19.1, welches mit Rasbian Jessy ausgeliefert wird, scheint sich anders
+zu verhalten bzw. die MPD-configs nicht mehr zu akzeptieren die ich damals hochgeladen habe.
+
+Wenn man sich jedoch stur an diese Anleitung hält, müsste man innerhalb weniger Stunden
+einen betriebsbereiten Webradio hinbekommen haben.
+
+###########################################################################################
+# Author: Laumer Matthias
+# Datum: 02.01.2016
+# matthias.laumer@web.de
+# wosimahier@gmail.com
+###########################################################################################
+
+Inhalt:
+
+(1) Installationsvorgang "Raspbian Jessy"
+(2) Installation von "proftpd"
+(3) Installation eines VNC Servers (x11vnc)
+(4) Installation von MPD
+(5) Installation von Python Abhängigkeiten
+(6) Anpassen von webradio.py
+(7) der erste Start
+(8) webradio.py automatisch starten
+(9) Directory Tree
+(10) Zusatzinfo: USB Stick immer an der selben Stelle mounten
+(11) GPIOs benutzen und einrichten
+(12) DHT11 Sensor in Betrieb nehmen
+
+FAQ
+
+===========================================================================================
+
+
+(1) Installationsvorgang "Raspbian Jessy"
+=========================================
+
+    - Lade dir eine aktuelle Version von Raspbian herunter: https://downloads.raspberrypi.org/raspbian_latest
+    - Befolge die Installationsanleitung unter: https://www.raspberrypi.org/documentation/installation/installing-images/README.md
+      (betriebssystemspezifisch, für die Installation unter Linux, siehe Video)
+    - Starte unter der grafischen Oberfläche "Menu">"Preferences">"Mouse and Keyboard Settings"> Reiter "Keyboard und setze ein
+      anders Keyboard Layout (German / Germany)
+    - "sudo raspi-config" Startet das Configurationsprogramm
+    - Gehe zu "1 Expand Filesystem"  >> Die ganze SD Karte steht dem Filesystem zur Verfügung
+    - Gehe zu "9 Advanced Options" >> "A9 Audio" und wähle die Einstellung "1 Force 3,5mm (headphone) jack
+    - "sudo nano /boot/config.txt" öffnet die Boot-Config
+        Füge am Ende der Datei folgende Inhalte ein:
+
+        # Own Settings
+        disable_overscan=0
+        hdmi_ignore_edid=0xa5000080
+        hdmi_force_hotplug=1
+        config_hdmi_boost=4
+        framebuffer_width=1024
+        framebuffer_height=600
+        hdmi_group=2
+        hdmi_mode=87
+        hdmi_ctv=1024 600 60 3 0 0 0
+
+    <STRG>+<o> um die Datei zu speichern, <STRG>+<x> um die Datei zu schließen
+    >> Dies stellt die Grafikeinstellungen auf 1024 x 600, auch ohne dass ein LCD angeschlossen ist.
+    >> Es können anstatt o.g. Auflösung auch andere Displayauflösungen eingestellt werden! Hierzu sind die Zeilen:
+        framebuffer_width=1024
+        framebuffer_height=600
+        hdmi_group=2
+        hdmi_mode=87
+        hdmi_ctv=1024 600 60 3 0 0 0
+    auf deine Auflösung zu ändern. Siehe dazu auch: http://elinux.org/RPiconfig
+
+    - "sudo apt-get update && sudo apt-get -y dist-upgrade" um die Installation zu aktualisieren (Dies kann etwas dauern)
+    - "sudo reboot" um neu zu starten
+
+(2) Installation von "proftpd"
+==============================
+
+    - Öffne ein Terminal (ssh oder direkt aus der grafischen Oberfläche)
+    - "sudo apt-get update && sudo apt-get install proftpd-basic" installiert das Paket
+    - "sudo nano /etc/proftpd/proftpd.conf" öffnet das Konfigurationsfile
+        -> Am Ende der Datei folgende Ergänzungen vornehmen:
+
+            DefaultRoot ~
+            AuthOrder mod_auth_file.c mod_auth_unix.c
+            AuthUserFile /etc/proftpd/ftpd.passwd
+            AuthPAM off
+            RequireValidShell off
+
+    <STRG>+<o> um die Datei zu speichern, <STRG>+<x> um die Datei zu schließen
+    - "cd /etc/proftpd" um in das Verzeichnis zu wechseln, in der die Passwortdatei angelegt werden muss
+    - "sudo ftpasswd --passwd --name pi --uid 1000 --home /home/pi --shell /bin/false" eingeben, anschließend ein Passwort definieren
+    - "sudo /etc/init.d/proftpd restart" um den Dienst neu zu starten
+
+    - Nun muss der Pi unter : "ftp://raspberrypi" nach eingabe des festgelegten Passwortes erreichbar sein.
+
+(3) Installation eines VNC Servers (x11vnc)
+===========================================
+
+    - "sudo apt-get install x11vnc" Installiert den Server.
+    - während des Installationsvorgangs werden Sie gefragt, wie Sie den Server betreiben wollen. > wählen Sie "standalone"
+    - "touch ~/.config/autostart/start_vnc.desktop" um einen Starter an zu legen, der xVNC automatisch nach dem X-Server startet
+    - "nano ~/.config/autostart/start_vnc.desktop" um die Datei zu editieren.
+    - Folgende Inhalte eingeben:
+
+        [Desktop Entry]
+        Name=VNC_Server
+        Comment=Startet VNC Server nach starten des X-Servers
+        Exec=x11vnc -desktop :0 -forever -loop
+
+      <STRG>+<o> um die Datei zu speichern, <STRG>+<x> um die Datei zu schließen
+    - "sudo reboot" um den Pi neu zu starten. Der xvnc Server wird nun automatisch nach dem Bootvorgang gestartet.
+    - auf dem Client-Rechner (also dem Rechner, von dem Sie aus auf den Pi zugreiffen wollen, installieren Sie "xvmc4viewer"
+    - "sudo apt-get install xvnc4viewer" installiert das Client-Programm (WICHTIG: Dies geschiet NICHT auf dem Pi, sondern auf
+      ihrem Client-Rechner
+    - Mittels "xvnc4viewer" wird das Programm nun vom Clientrechner aus aufgerufen. Der Server ist "raspberrypi".
+
+    - Nun sollten Sie das Display des Raspberry auf Ihrem Client Rechner sehen können. (in einem Fenster)
+
+(4) Installation von MPD
+========================
+
+    - "mkdir ~/webradio" erstellt ein leeres Verzeichnis für die playlisten und die
+      Software "Webradio.py"
+    - "sudo apt-get install mpd mpc"  um MPD und das Terminalprogramm mpc zu installieren.
+    - "sudo service mpd stop"         um den bereits laufenden MPD Prozess zu stoppen.
+    - "sudo update-rc.d mpd disable"  um den Autostart des MPD während des Bootprozesses zu verhindern
+    - "sudo nano /etc/mpd.conf"         um die Konfigurationsdatei von MPD zu ändern
+        Folgende Inhalte eintragen:
+
+    # START #######################################################################
+    # Files and directories #######################################################
+    music_directory		"/home/pi/Music"
+    playlist_directory		"/home/pi/webradio"
+    db_file			"/home/pi/.mpd/database"
+    log_file		"/home/pi/.mpd/log"
+    pid_file			"/home/pi/.mpd/pid"
+    state_file			"/home/pi/.mpd/state"
+    sticker_file                   "/home/pi/.mpd/sticker.sql"
+    ###############################################################################
+    # General music daemon options ################################################
+    port				"6600"
+    ###############################################################################
+    # Symbolic link behavior ######################################################
+    follow_outside_symlinks	"yes"
+    follow_inside_symlinks		"yes"
+    ###############################################################################
+
+    # Input #######################################################################
+    input {
+            plugin "curl"
+    }
+
+    ###############################################################################
+    # Audio Output ################################################################
+    ###############################################################################
+    audio_output {
+	    type		"alsa"
+	    name		"My ALSA Device"
+    }
+    ###############################################################################
+    # Character Encoding ##########################################################
+    filesystem_charset		"UTF-8"
+    id3v1_encoding			"UTF-8"
+    ####################################################################### ENDE
+
+  <STRG>+<o> um die Datei zu speichern, <STRG>+<x> um die Datei zu schließen
+
+
+    - "mkdir ~/.mpd"   erstellt das User-Verzeichnis für MPD
+    - "cd ~/.mpd"      wechsle in das Userverzeichnis
+    - "touch database"  lege die benötigten Files an
+    - "mpd" startet den Service
+    - "touch ~/.config/autostart/start_mpd.desktop" um einen neuen Starter zu erstellen.
+    - "nano ~/.config/autostart/start_mpd.desktop"  um den Starter zu editieren.
+        Folgende Inhalte:
+
+        [Desktop Entry]
+        Type=Application
+        Name=Music Player Daemon
+        Comment=Startet MPD als Benutzer nach Start des X-Servers
+        Exec=mpd
+        StartupNotify=false
+        Terminal=false
+        Hidden=false
+
+      <STRG>+<o> um die Datei zu speichern, <STRG>+<x> um die Datei zu schließen
+
+    - "sudo reboot" um den Pi neu zu starten. MPD sollten nun als "User" automatisch gestartet werden
+    - nach erfolgtem Neustart ein "mpc update" um die Datenbank zu erzeugen und schon mal ein zu lesen.
+
+    WICHTIGER HINWEIS: Das in der Dropbox enthaltene ".mpdconf" file, funktioniert anscheinend nicht mehr
+    mit Version 0.19.1 (welches mit Rasbian Jessy ausgeliefert wird), wenn du allerdings Rasbian Wheezy
+    verwendest, kannst du dieses gerne auch benutzten.
+
+
+(5) Installation von Python Abhängigkeiten
+==========================================
+
+    - "sudo apt-get install python-qt4 python-mpd python-mpdclient python-rpi.gpio"
+    - Hierdurch werden alle notwendigen Pythonpakete nachinstalliert, die bei einer "normalen" Installation
+      noch nicht mitinstalliert wurden.
+
+
+(6) Anpassen von webradio.py
+==========================================
+
+    - Die heruntergeladenen Files aus der Dropbox müssen natürlich erst einmal in den Ordner ~/webradio
+      kopiert werden. Dies könnt Ihr mittels des eingerichteten FTP-Zugangs bewerkstelligen.
+    - "nano ~/webradio/webradio.py"
+    - Ändere die Pfade unter "MusicFolder="  (2 mal!) zum Pfad welchen du in mpd.conf angegeben hast
+    - Ändere VARIABLE_DATABASE=  (2 mal!) zum Pfad, innerhalb deines Music Ordners in welchen Variable
+      Dinge wie z.B. USB Sticks geladen werden. (Dieser Pfad wird automatisch upgedatet) und ist relativ
+      von dem den du in /etc/mpd.conf festgelegt hast. (z.B. "usb_device" >> siehe Directory-Tree unten)
+
+(7) Der erste Start
+====================
+
+    - "python ~/webradio/webradio.py --disable-gpio"
+
+(8) webradio.py automatisch starten
+===================================
+
+    - "touch ~/.config/autostart/start_webradio.desktop" um einen neuen Starter an zu legen
+    - "nano ~/.config/autostart/start_webradio.desktop" um den Starter zu editieren.
+        Folgende Inhalte:
+
+        [Desktop Entry]
+        Type=Application
+        Name=Webradio
+        Comment=Startet webradio.py nach Start des X-Servers
+        Exec=python /home/pi/webradio/webradio.py --disable-gpio
+        Path=/home/pi/webradio/
+        Terminal=false
+
+    - nach einem anschließenden Reboot mittels "sudo reboot" sollte nun der Webradio automatisch starten.
+
+Alles andere überlasse ich euch ;-)
+
+(9) Directory Tree
+===================
+
+Hier noch mein Directory Tree (Dateistruktur) meines Webradios, die Einstellungen in webradio.py sind darauf
+abgestimmt, müssen jedoch an dein Ordner-System angepasst werden. Alternativ kannst du natürlich auch
+deine Ordner genau so aufbauen wie hier dargestellt:
+
+pi@webradio2 ~ $ tree -d -L 2
+.                                 # im Homeordner findet sich webradio.log
+├── Adafruit_Python_DHT
+│   ├── Adafruit_DHT
+│   ├── Adafruit_DHT.egg-info
+│   ├── build
+│   ├── dist
+│   ├── examples
+│   └── source
+├── Desktop
+├── ftp_server    #hierhin wird der FTP Server / das NAS, oder was auch immer (statische) MP3's enthält gemountet.
+│   ├── Music
+│   └── Musik2
+├── Musik                                      # > Dieser Ordner ist in meiner .mpdconf als Musikordner hinterlegt
+│   ├── ftp_server -> /home/pi/ftp_server/     # dies ist ein symbolischer Link !
+│   └── usb_device -> /home/pi/usb_device/     # dies ist ein symbolischer Link !
+├── python_games
+├── usb_device            # hierhin werden automatische USB Sticks gemountet wenn diese angeschlossen werden
+├── webradio              # in diesem Ordner liegt webradio.py
+│   ├── Albumart
+│   ├── documentations
+│   ├── lib
+│   ├── Logos
+│   ├── res
+│   └── ui
+└── xinput_calibrator-0.7.5
+    ├── man
+    ├── scripts
+    └── src
+
+"ftp_server" hier wird mein Netzlaufwerk gemountet. Dieser Ordner wird NICHT standardmäßig von MPD eingelesen.
+Die hier mehrere GB MP3s leigen, dauert das indizieren der Datenbank erst einmal mehrere Stunden bis hin zu
+mehreren Tagen (!)
+
+"usb_device" ist der Ordner, welcher verwendet wird, wenn der Benutzer einen USB Stick einlegt, welcher eingelesen
+werden muss.
+
+Im Ordner "Musik" welchen ich in den MPD-Settings als "music_directory" angegeben habe, befinden sich lediglich
+2 symbolische Links.
+
+
+(10) Zusatzinfo: USB Stick immer an der selben Stelle mounten
+==============================================================
+
+Will man, dass ein USB Stick (und zwar egal welcher) immer an ein und dem selben Ort
+gemountet wird, kann man wie folgt vorgehen:
+
+Normales Verhalten:
+USB Sticks werden automatisch eingehängt unter "/media/ID"
+der Gerätemountpunkt ist im Normalfall /dev/sda1 (bzw. muss natürlich herausgefunden werden)
+
+z.B. mit "blkid" oder "mount -l"
+***********************************************************
+Schritt 1:
+
+Im Dateimanager unter "Bearbeiten">> "Einstellungen">>"Datenträgerverwaltung"
+die haken raus nehmen... (kein Automount)
+**********************************************************
+Schritt 2:
+unter /etc/fstab eine neue Regel anlegen:
+
+#mount USB devices to /home/pi/usb_device
+/dev/sda1         /home/pi/usb_device      auto            users,ro,nofail          0         0
+
+HINWEIS: Hier wird "ro" benutzt (read-only), will man auch schreiben, muss rw verwendet werden
+**********************************************************
+Schritt 3:
+
+unter /etc/udev/rules.d/
+eine neue Regel erstellen (Dateiname z.B. 80-neueRegel.rules), mit dem Inhalt:
+
+SUBSYSTEM=="block", RUN+="/bin/mount -a"
+**********************************************************
+HINWEIS: Umount /dev/sda1 ist auch ohne sudo möglich, da das Gerät mit "users" eingehängt wurde.
+Der Mountvorgang geschiet automatisch, da eine udev Regel besteht die aufgerufen wird,
+sobald ein USB Device angeschlossen wird.
+
+
+(11) GPIOs benutzen und einrichten:
+====================================
+
+Die verwendeten GPIOs sowie deren Funktion sind unter /webradio/lib/gpio_watchdog.py festgelegt.
+Ich habe bei meinem Setup einen DHT11 Temp./Luftfeuchte Sensor im Einsatz, desweiteren viele "Taster" welche alle lowaktiv geschaltet sind. (d.h. es muss ein "high" Signal an den GPIOs anliegen um einen "ruhezustand" aus zu lösen).
+
+Es gibt daher unterschiedliche Methoden webradio.py zu starten:
+
+(1)    python ~/webradio/webradio.py    >> Reale GPIOs inaktiv, mit Simulator
+(2)    python ~/webradio/webradio.py  --disable-gpio  >> Reale GPIOs inaktiv, kein Simulator
+(3)    sudo python ~/webradio/webradio.py  >> Reale GPIOs aktiv, kein Simulator
+
+Wenn man sich für Variante 3 entscheidet, wird man also erst einmal auf Probleme stoßen, wenn man nicht den EXAKT gleichen Hardwareaufbau hat wie ich (siehe Schaltplan).
+
+Um Probleme mit "offenen Kontakten", fehlender Hardware oder Libs zu umgehen, habe ich in den Überordner (Hauptordner) die Datei "gpio_watchdog_all_GPIO_of_exepting_Power_switch_and_LED.py" abgelegt.
+
+Diese ist eine stark beschnittene Datei, die die Datei "gpio_watchdog.py" im Ordner lib ersetzen kann.
+
+Im Terminal also:
+
+cd ~/webradio/
+mv lib/gpio_watchdog.py lib/gpio_watchdog_BACKUP.py
+cp gpio_watchdog_all_GPIO_of_exepting_Power_switch_and_LED.py lib/gpio_watchdog.py
+
+Fertig.
+
+
+(12) DHT11 Sensor in Betrieb nehmen:
+=====================================
+
+Wenn ihr euch für den Einsatz eines DHT11 entscheidet, muss noch die dazugehörige library installiert werden:
+
+wget "https://github.com/adafruit/Adafruit_Python_DHT/archive/master.zip"
+unzip master.zip
+cd Adafruit_Python_DHT-master/
+sudo apt-get install build-essential python-dev
+sudo python setup.py install
+
+Fertig.
+Damit solltet ihr in der Datei lib/gpio_watchdog.py eure Einstellungen treffen können.
+Sobald der DHT11 arbeitet, wird die Anzeige oben in der webradio.py mit den aktuellen Temperatur und Luftfeuchte Daten ergänzt.
+
+
+FAQ:
+=========================================
+Thema: MP3's werden nicht erkannt, bzw. können der Playliste nicht hinzugefügt werden:
+
+mpd in Kombination mit "großen" Datenbanken bzw. Dateistrukturen (>10k) hat einen großen Nachteil....
+er braucht sehr lange um zu indizieren.
+
+Um dieses Problem für mich zu umgehen, unterscheide ich zwischen zwei verschiedenen Arten von Ordnern innerhalb meines Musikordners.
+aus webradio.py:
+MusicFolder = "/home/pi/Musik"              # enter here the selected path in /etc/mpd.conf from the RPI
+VARIABLE_DATABASE="usb_device"       # enter the folder in your musicfolder which should be updated
+
+die "Variable_Database" ist also ein Ordner (Unterordner in /home/pi/music), welcher regelmäßig (bein eintreten eines bestimmten events) eingelesen wird.
+Alles andere wird NICHT automatisch eingelesen, weshalb hier ein "manuelles" updaten notwendig ist, um die MP3s einmal indexiert zu bekommen.
+(was bei einer extrem großen Datenbank eine weile dauern kann....)
+Dazu kannst du im Terminal einfach ein "mpc update" absetzen, wodurch alle Ordner in deinem Musikordner neu indexiert werden. (sehen, was in der Datenbank ist, kannst du mit "mpc listall")
+
+Ich habe daher in meinem Ordner auf den ich in mpd.conf verweise nur zwei symbolische Links liegen:
+ftp_server und usb_device.
+Ich habe als VARIABLE_DATABASE "usb_device" angegeben. >> dieser wird dann immer automatisch aktualisiert...
+ftp_server wurde allerdings manuell eingelesen (mpc update ftp_server)
+
+(siehe Punkt 9 Directory Tree)
+
+Ein USB Stick wird bei mir automatisch nach "usb_device" gemountet. Dieses Verzeichnis wird auch gemonitored..
+(schaut euch hierzu die Zeile 127 in webradio.py an)
+Sobald "etwas in den überwachten Ordner gemountet wird, wird die Datenbank (mpd) neu eingelesen (allerdings nur die "variable" (VARIABLE_DATABASE="usb_device")  , um Zeit zu sparen...)
+
+##############################################
+
+Thema: Der Webradio schaltet selbstständig alle paar Sekunden auf einen anderen Sender ??
+
+Wenn webradio.py "willkürlich" Sender wechselt, liegt es meist daran, dass du GPIOs welche in der Datei libs/gpio_watchdog.py definiert sind und überwacht werden, nicht angeschlossen sind.
+Dies kann der Fall sein, wenn du Webradio.py mittesl "sudo python ~/webradio/webradio.py" startest (siehe Punkt11, GPIOS benutzen und einrichten)
+
+Der Gund ist, dass ich die GPIOs "Lowaktiv" verwende... liegt also keine Spannung an, bzw. ein Schluss auf Masse, gilt der GPIO als "geschaltet".... wenn du nun einen offenen Kontakt hast, erkennt er ständig schaltvorgänge an diesem Eingang und wechselt den Sender (weil er glaubt, dass du eine der 4 Hardwaretasten gedrückt hast...)
+
+Schaffe also eine Pullup-Spannung von 3.3V, oder kommentiere den entsprechenden Pin in der Datei /lib/gpio_watchdog.py aus.
+Ein Beispiel liegt auf der Dropbox im Main-Ordner .... (gpio_watchdog_all_GPIO_of_exepting_Power_switch_and_LED.py)
+
+##############################################
+
+Thema: Tastenbelegung (Sender) werden nicht gespeichert bzw. gehen nach einem Neustart verloren ?
+
+Die "Presets" werden im flüchtigen Speicher gehalten und erst beim beenden von webradio.py auf den stabilen Speicher gelegt. Es wird dabei auch ein Logeintrag erzeugt, welchen du in der Datei "webradio.log" in
+deinem Home-Verzeichnis findest.
+Du kannst hierüber recht einfach überprüfen, ob das Programm "sauber beendet" oder "gekillt" wurde ;-)
+
+Hast du zufällig noch irgend einen Daemon im Hintergrund laufen mit dem du den Shutdown-Befehl aufrufst, also irgendetwas das
+die Logik aus webradio.py ausser Kraft setzt, funktioniert dies natürlich nicht mehr
+
+Ich habe da zb. mal ein Video gemacht... (youtube, "herunterfahren mittels hard-waretaster...") ... wenn du dieses Vorgehen "paralell" zum webradio.py benutzt, würdest du einen solchen effekt bekommen, wie du Ihn momentan hast, und die presets würden immer verlorengehen, da das Programm webradio.py nie "sauber beendet" wird.
+
+Ausserdem kannst du prüfen, ob in deinem Ordner ~/webradio/ eine Datei liegt namens "presets.fav" ... dort müssten dann auch deine aktuellen Sender stehen...
+vielleicht läuft aber auch irgendetwas ganz anderes schief... aber wie gesagt, eigentlich sollte sich das Ganze recht gut über den log debuggen lassen.
+Vielleicht hilft dir auch noch das Argument "--debug" etwas, das die Ausgabe im Log etwas erweitert ...
+
+##############################################
+
+
+
+
+
+
+
+
