@@ -3,6 +3,8 @@
 ---
 ###Im YouTube-Video ist die Version1 vorgeführt worden, welche über die im Video verlinkten Download-Bereiche heruntergeladen werden kann!
 
+<a href="http://my-darling.is-a-linux-user.org/?p=349">Besuche meinen Blog für mehr Informationen über Version2</a>
+
 __**Zusatzfunktionen welche z.Z. in Arbeit sind von V1 zu V2:**__
 <table style="undefined;table-layout: fixed; width: 864px">
 <colgroup>
