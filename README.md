@@ -1,10 +1,9 @@
 #Webradio V2 - Ein MPD-gestützter Music-Player für den Raspberry Pi:
 [![Youtube-Video](http://img.youtube.com/vi/8zRfpBta6v8/0.jpg)](https://www.youtube.com/watch?v=8zRfpBta6v8)
 ---
-###Im YouTube-Video ist die Version1 vorgeführt worden, welche über die im Video verlinkten Download-Bereiche
-heruntergeladen werden kann!
+###Im YouTube-Video ist die Version1 vorgeführt worden, welche über die im Video verlinkten Download-Bereiche heruntergeladen werden kann!
 
-Zusatzfunktionen welche z.Z. in Arbeit sind von V1 zu V2:
+__**Zusatzfunktionen welche z.Z. in Arbeit sind von V1 zu V2:**__
 <table style="undefined;table-layout: fixed; width: 864px">
 <colgroup>
 <col style="width: 199px">
