@@ -428,6 +428,31 @@ Vielleicht hilft dir auch noch das Argument "--debug" etwas, das die Ausgabe im 
 
 ##############################################
 
+Thema "FFN wird nicht abgespielt, bzw. wird nach kurzem Anspielen gewechselt.
+
+Das Problem, dass Sender (reproduzierbar "ffn") bei einigen Usern mit webradio.py nicht
+funktioniert, liegt an einem Bug in der mpd-Version 0.19.1-1.1 (Abfrage mittels "dpkg-query -W mpd")
+Allerding ist diese Version die einzige die bei Raspbian jessie verfügbar ist.
+Um eine aktuellere Version installiert zu bekommen, bei der das Problem nicht mehr besteht, müssen die "backports" aktiviert werden und die darin enthaltene mpd-Version installiert werden.
+
+Hier die Schritte (am besten Copy-/Paste)
+
+(1) sudo touch /etc/apt/sources.list.d/backports.list
+(2) sudo bash -c 'echo "deb ftp://ftp.nl.debian.org/debian jessie-backports main contrib non-free" > /etc/apt/sources.list.d/backports.list'
+(3) gpg --keyserver pgpkeys.mit.edu --recv-key  8B48AD6246925553
+(4) gpg -a --export 8B48AD6246925553 | sudo apt-key add -
+(5) sudo apt-get update
+(6) sudo apt-get install -t jessie-backports mpd
+(7) #auf Abfrage ob mpd.conf beibehalten werden soll "N" wählen (momentane Version beibehalten)
+(8) sudo service mpd restart
+
+Fertig.
+Nun sollte der Sender "ffn" ohne Probleme ab zu spielen sein.
+
+Hinweis:
+In der mpd Verison aus Raspbian Wheezy (0.16.7-2) scheint o.g. Bug nicht zu existieren. Daher sollte dieses Problem mit Wheezy nicht auftauchen.
+Bitte mal testen und Bescheid geben ob es funktioniert hat!
+
 
 
 
