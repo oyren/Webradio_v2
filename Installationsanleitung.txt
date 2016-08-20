@@ -103,8 +103,7 @@ FAQ
 ===========================================
 
     - "sudo apt-get install x11vnc" Installiert den Server.
-    - während des Installationsvorgangs werden Sie gefragt, wie Sie den Server betreiben wollen. > wählen Sie "standalone"
-    - "touch ~/.config/autostart/start_vnc.desktop" um einen Starter an zu legen, der xVNC automatisch nach dem X-Server startet
+   - "touch ~/.config/autostart/start_vnc.desktop" um einen Starter an zu legen, der xVNC automatisch nach dem X-Server startet
     - "nano ~/.config/autostart/start_vnc.desktop" um die Datei zu editieren.
     - Folgende Inhalte eingeben:
 
