@@ -82,6 +82,7 @@ FAQ
 
     - Öffne ein Terminal (ssh oder direkt aus der grafischen Oberfläche)
     - "sudo apt-get update && sudo apt-get install proftpd-basic" installiert das Paket
+    - während des Installationsvorgangs werden Sie gefragt, wie Sie den Server betreiben wollen. > wählen Sie "standalone"
     - "sudo nano /etc/proftpd/proftpd.conf" öffnet das Konfigurationsfile
         -> Am Ende der Datei folgende Ergänzungen vornehmen:
 
@@ -102,7 +103,6 @@ FAQ
 ===========================================
 
     - "sudo apt-get install x11vnc" Installiert den Server.
-    - während des Installationsvorgangs werden Sie gefragt, wie Sie den Server betreiben wollen. > wählen Sie "standalone"
     - "touch ~/.config/autostart/start_vnc.desktop" um einen Starter an zu legen, der xVNC automatisch nach dem X-Server startet
     - "nano ~/.config/autostart/start_vnc.desktop" um die Datei zu editieren.
     - Folgende Inhalte eingeben:
