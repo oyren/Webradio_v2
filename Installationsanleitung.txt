@@ -62,7 +62,7 @@ FAQ
         framebuffer_height=600
         hdmi_group=2
         hdmi_mode=87
-        hdmi_ctv=1024 600 60 3 0 0 0
+        hdmi_cvt=1024 600 60 3 0 0 0
 
     <STRG>+<o> um die Datei zu speichern, <STRG>+<x> um die Datei zu schließen
     >> Dies stellt die Grafikeinstellungen auf 1024 x 600, auch ohne dass ein LCD angeschlossen ist.
@@ -71,7 +71,7 @@ FAQ
         framebuffer_height=600
         hdmi_group=2
         hdmi_mode=87
-        hdmi_ctv=1024 600 60 3 0 0 0
+        hdmi_cvt=1024 600 60 3 0 0 0
     auf deine Auflösung zu ändern. Siehe dazu auch: http://elinux.org/RPiconfig
 
     - "sudo apt-get update && sudo apt-get -y dist-upgrade" um die Installation zu aktualisieren (Dies kann etwas dauern)
