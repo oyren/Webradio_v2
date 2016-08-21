@@ -129,8 +129,8 @@ FAQ
     - "sudo apt-get install mpd mpc"  um MPD und das Terminalprogramm mpc zu installieren.
     - "sudo service mpd stop"         um den bereits laufenden MPD Prozess zu stoppen.
     - "sudo update-rc.d mpd disable"  um den Autostart des MPD während des Bootprozesses zu verhindern
-    - "sudo rm /etc/mpd.conf"		um eine übersichtliche Config zu erhalten 	
-    - "sudo nano /etc/mpd.conf"         um die Konfigurationsdatei von MPD zu ändern
+    - "sudo mv /etc/mpd.conf /etc/mpd.conf.backup"   um die originale Config zu erhalten 	
+    - "sudo nano /etc/mpd.conf"         um eine eigene Konfigurationsdatei von MPD an zu legen
         Folgende Inhalte eintragen:
 
     # START #######################################################################
