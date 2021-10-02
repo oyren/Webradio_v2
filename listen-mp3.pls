@@ -9,4 +9,6 @@ Length2=-1
 File3=http://listen.housetime.fm/tunein-aacisdn-pls
 Title3=HouseTime.FM - AACplus 40k - Low Quality - (ISDN)
 Length3=-1
+File4=http://uk1.internet-radio.com:8294/live.m3u&t=.pls
+Length4=-1
 Version=2
